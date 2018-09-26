@@ -1,0 +1,33 @@
+import os
+import subprocess
+
+def ping(ip):
+    try: 
+        ping_ip = subprocess.check_output(['ping', '-c', '1', ip])
+        return 0
+    except subprocess.CalledProcessError as error:
+        return 1
+       
+
+
+def main():
+
+    os.system("clear")
+    print("-Reachability test of IP/hostnames in sites file started. Please wait.-")
+
+    out_file = open("results.txt", "w")   
+
+    with open("sites_kso") as in_file:
+        for line in in_file:
+            status = ping(line.strip())
+            if (status == 0):
+                out_file.write(line.strip() + " is up!\n")
+            else:
+                out_file.write("*** " + line.strip() + " is down! ***\n") 
+
+    out_file.close()
+
+    print("-Test completed. Results located in: results.txt-")    
+
+if __name__ == "__main__":
+    main()
